@@ -59,6 +59,8 @@ class Client
 				//Wait for a response from the server (move this listener to it's own thread if used in a chat client)
 				System.out.println ("[SERVER->CLIENT] Message received from server: \"" + socketInput.readLine() + "\"");
 				
+				/** Right here is where you want to process the clock times from the server */
+				
 				System.out.print ("[CLIENT] Send message to server: ");
 			}
 			

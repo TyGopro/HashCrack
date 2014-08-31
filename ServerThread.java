@@ -4,7 +4,7 @@
 *	PURPOSE:	Server software to be adapted at a later date
 */
 
-//REMARKS:		Ask a client to provide a thread/client name at some point in the future.
+//REMARKS:		Ask a client to provide a thread/client name and other things at some point in the future.
 
 import java.net.*;
 import java.net.InetAddress;
@@ -30,6 +30,9 @@ public class ServerThread extends Thread
 			socketOutput = new PrintWriter(clientSocket.getOutputStream(), true);                   
 			socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			
+			System.out.print ("[SERVER] A new client has joined from the following address: ");
+			System.out.println (clientSocket.getInetAddress().getHostAddress());
+			
 			//Handle client input here; modify this part to suit our purposes
 			while ((inputLine = socketInput.readLine()) != null) 
 			{
@@ -44,11 +47,14 @@ public class ServerThread extends Thread
 			clientSocket.close();
 			socketOutput.close();
 			socketInput.close();
+			
+			System.out.print ("[SERVER] A client with the following address has disconnected: ");
+			System.out.println (clientSocket.getInetAddress().getHostAddress());
 		} 
 		catch (IOException ioe)
 		{
-			System.out.print ("[ERROR] IO error when opening a client's socket over ");
-			System.out.println ("port \"" + clientSocket.getInetAddress().getHostAddress() + "\".");
+			System.out.print ("[ERROR] IO error when opening a client's connection at ");
+			System.out.println ("address \"" + clientSocket.getInetAddress().getHostAddress() + "\".");
 		}
 	}
 }

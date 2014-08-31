@@ -34,7 +34,7 @@ class Clock
 	public Clock ()
 	{
 		asciiTime = new char[ARRAY_LENGTH];
-		reset();		//WARNING: DOES NOT CHECK FOR A BLANK PLAINTEXT, DO THAT YOURSELF!
+		reset();
 	}
 	
 	//PURPOSE:	Returns a String containing the value of the next clock tick

@@ -29,9 +29,9 @@ public class HashCrack
 		boolean found = false;
 		
 		Clock clock = new Clock ("!  ");	//Create new clock.
-		while (!found)						//NOTE: THIS DOES NOT CHECK THE VALUE OF THE CURRENT CLOCK TIME!
-		{									//CREATE A SEPERATE CHECK FOR THAT^ BEFORE ENTERING THE LOOP!
-			clockTime = clock.getNext();
+		clockTime = clock.getClock();
+		while (!found)
+		{
 			testHash = getHash(clockTime);
 			
 			System.out.println ("[TESTING] Clock is: \"" + clockTime + "\" and hash is: " + testHash);
@@ -41,8 +41,14 @@ public class HashCrack
 				found = true;
 				System.out.println ("[SYSTEM] Hashed plaintext is: " + clockTime);
 			}
+			else
+			{
+				clockTime = clock.getNext();
+			}
 		}
 	}
+	
+	
 	
 	// PURPOSE:	String goes in, hashed String comes out */
 	public static String getHash (String hashThis)

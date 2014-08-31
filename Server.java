@@ -15,12 +15,12 @@ class Server
 {
 	private static final int PORT_NUMBER = 6789;
 	private static ServerSocket serverSocket = null;
-	private static String inputLine;
 	private static boolean isServerOpen;
 	
 	public static void main(String[] args)
 	{
-		System.out.println ("[SYSTEM] Starting up server...");
+		System.out.println ("[SYSTEM] Starting up server over port " + PORT_NUMBER);
+		System.out.println ("[SYSTEM] Press ctrl+c to exit.");
 		
 		openServer();
 		
@@ -28,7 +28,7 @@ class Server
 	}
 	
 	//PURPOSE:	Handles the opening of the server and handling the inputs from clients
-	public static void openServer ()
+	private static void openServer ()
 	{
 		try
 		{
@@ -39,14 +39,10 @@ class Server
 			isServerOpen = true;
 			
 			//Handle client input here; modify this part to suit our purposes
-			while (isServerOpen) 	//Cannot use while(true) because java doesn't like unreachable code
+			while (isServerOpen) 	//Use isFound here in the future when finding hashes
 			{
 				//Create a new ServerThread and start it. Waits for client connection.
 				new ServerThread (serverSocket.accept()).start();
-				
-				//Remember to print it out on this end
-				System.out.println ("[CLIENT->SERVER] Message received from client: \"" + inputLine + "\".");
-				System.out.println ("[SERVER] Waiting for inbound traffic from a client...");
 			}
 			
 			serverSocket.close();
