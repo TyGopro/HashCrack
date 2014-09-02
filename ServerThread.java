@@ -37,7 +37,10 @@ public class ServerThread extends Thread
 			while ((inputLine = socketInput.readLine()) != null) 
 			{
 				//returns the input we got to the client
-				socketOutput.println(inputLine);
+				//socketOutput.println(inputLine);
+				
+				//Sends back a response to indicate that the message was recieved
+				socketOutput.println ("Message recieved.");
 				
 				//Remember to print it out on this end
 				System.out.println ("[CLIENT->SERVER] Message received from client: \"" + inputLine + "\".");
