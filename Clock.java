@@ -37,6 +37,50 @@ class Clock
 		reset();
 	}
 	
+	//PURPOSE:	Adds an arbitrary amount of time to the current clock. Mostly used for load balancing.
+	public void increment (String incrementVal)
+	{
+		char[] incrementArr;
+		
+		if (incrementVal.length() > ARRAY_LENGTH)
+		{
+			System.out.println ("[ERROR] Increment value is larger then clock array. Increment aborted.");
+		}
+		else if (asciiTime == null)
+		{
+			System.out.println ("[ERROR] Clock was not initialized. Increment aborted.");
+		}
+		else
+		{
+			incrementArr = incrementVal.toCharArray();
+			
+			//Add both arrays together in the appropriate spots
+			for (int i = 0; i < incrementArr.length; i++)
+			{
+				asciiTime[asciiTime.length - incrementArr.length + i] += incrementArr[i];
+			}
+			
+			//Now adjust values to be within printable range
+			checkLimits();
+		}	
+	}
+	
+	public void checkLimits ()
+	{
+		//Check printable clock limits
+		for (int i = ARRAY_LENGTH-1; i >= 0; i--)
+		{
+			if (asciiTime[i] > 126)		//Last printable character "~"
+			{
+				asciiTime[i] = 32;		//First printable character " " (space)
+				if (i != 0)				//If not at the beginning of the arrray, prevents out of index boundary problem
+				{
+					asciiTime[i-1]++;	//Increment next "time unit"
+				}
+			}
+		}
+	}
+	
 	//PURPOSE:	Returns a String containing the value of the next clock tick
 	public String getNext ()
 	{
@@ -45,18 +89,7 @@ class Clock
 			//Increment clock by one
 			asciiTime[ARRAY_LENGTH-1]++;
 			
-			//Check printable clock limits
-			for (int i = ARRAY_LENGTH-1; i >= 0; i--)
-			{
-				if (asciiTime[i] > 126)		//Last printable character "~"
-				{
-					asciiTime[i] = 32;		//First printable character " " (space)
-					if (i != 0)				//If not at the beginning of the arrray, prevents out of index boundary problem
-					{
-						asciiTime[i-1]++;	//Increment next "time unit"
-					}
-				}
-			}
+			checkLimits();
 		}
 		else
 		{
@@ -91,7 +124,7 @@ class Clock
 		return returnValue;
 	}
 		
-	//PURPOSE:	Prints the underlying array this clock uses
+	//PURPOSE:	Prints the underlying array this clock uses, for debugging purposes
 	public void printClock ()
 	{
 		if (asciiTime != null)
