@@ -72,7 +72,7 @@ class Clock
 		{
 			if (asciiTime[i] > 126)		//Last printable character "~"
 			{
-				asciiTime[i] = 32;		//First printable character " " (space)
+				asciiTime[i] = (char)(asciiTime[i] - 95);		//First printable character " " (space)
 				if (i != 0)				//If not at the beginning of the arrray, prevents out of index boundary problem
 				{
 					asciiTime[i-1]++;	//Increment next "time unit"
