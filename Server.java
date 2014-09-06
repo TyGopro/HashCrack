@@ -5,8 +5,7 @@
 */
 
 //ADDITIONAL REMARKS: 	Look up multicasting, if that's the kind of thing we need?
-// 						No idea what heppens when we try to get multiple clients to connect. Research!
-//						Get this thing threaded somehow, make a counter for # of connected clients as well.
+//						Make a counter for # of connected clients as well.
 
 import java.net.*;
 import java.io.*;

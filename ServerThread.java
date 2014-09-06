@@ -5,6 +5,8 @@
 */
 
 //REMARKS:		Ask a client to provide a thread/client name and other things at some point in the future.
+//				Static clock goes in here, solves all the design problems. 
+// 				What about synchronization?
 
 import java.net.*;
 import java.net.InetAddress;
@@ -16,6 +18,10 @@ public class ServerThread extends Thread
 	private PrintWriter socketOutput = null;
 	private BufferedReader socketInput = null;
 	private static String inputLine;
+	private static Clock clock = new Clock ();
+	private static final String CHUNK = "!!";
+	private static String startTime;
+	private static String stopTime;
 	
 	public ServerThread (Socket clientSocket)
 	{
@@ -36,11 +42,17 @@ public class ServerThread extends Thread
 			//Handle client input here; modify this part to suit our purposes
 			while ((inputLine = socketInput.readLine()) != null) 
 			{
-				//returns the input we got to the client
-				//socketOutput.println(inputLine);
+				//Remember, in the future, check inputLine here for results of work!
+				
+				startTime = clock.getClock();
+				clock.increment(CHUNK);
+				stopTime = clock.getClock();
 				
 				//Sends back a response to indicate that the message was recieved
-				socketOutput.println ("Message recieved.");
+				//socketOutput.println ("Message recieved.");
+				
+				//Sends the next chunk of work to any client that asks for it
+				socketOutput.println (startTime + ":" + stopTime);
 				
 				//Remember to print it out on this end
 				System.out.println ("[CLIENT->SERVER] Message received from client: \"" + inputLine + "\".");
