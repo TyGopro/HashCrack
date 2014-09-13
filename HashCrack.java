@@ -29,7 +29,7 @@ public class HashCrack
 		boolean found = false;
 		
 		Clock clock = new Clock ("!  ");	//Create new clock.
-		clockTime = clock.getClock();
+		clockTime = clock.getTime();
 		while (!found)
 		{
 			testHash = getHash(clockTime);
@@ -60,7 +60,7 @@ public class HashCrack
 		byte[] byteDigest = null;
 		byte[] bytesOfInput = null;
 		
-		/** Set our digest type to MD5 */
+		/** Set our digester type to MD5 */
 		try
 		{
 			digester = MessageDigest.getInstance(hashType);
@@ -93,10 +93,10 @@ public class HashCrack
 			
 			if (representation < 0x10)
 			{
-				hexString.append('\u0030');	//Put that leading zero back on the byte if it's under 0x10
-			}
+				hexString.append('\u0030');	//Put that leading zero back on the byte if it's under 0x10.
+			}// '\u0030' is the hex value for '0'.
 			
-			hexString.append(Integer.toHexString(representation));	//Finally, add the resulting byte to the output.
+			hexString.append(Integer.toHexString(representation));	//Finally, add the resulting byte in base 16 to the output.
 		}
 		
 		

@@ -97,11 +97,11 @@ class Clock
 		}
 		
 		//Convert array into String and return it
-		return getClock();
+		return getTime();
 	}
 	
 	//PURPOSE: 	Return the current value of the clock as a trimmed string
-	public String getClock ()
+	public String getTime ()
 	{
 		String returnValue = "";
 		

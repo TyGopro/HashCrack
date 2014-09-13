@@ -38,7 +38,7 @@ class Server
 			isServerOpen = true;
 			
 			//Handle client input here; modify this part to suit our purposes
-			while (isServerOpen) 	//Use isFound here in the future when finding hashes
+			while (isServerOpen) 	//Use isFound here in the future when finding hashes?
 			{
 				//Create a new ServerThread and start it. Waits for client connection.
 				new ServerThread (serverSocket.accept()).start();

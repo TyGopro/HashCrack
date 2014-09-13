@@ -42,21 +42,23 @@ public class ServerThread extends Thread
 			//Handle client input here; modify this part to suit our purposes
 			while ((inputLine = socketInput.readLine()) != null) 
 			{
-				//Remember, in the future, check inputLine here for results of work!
+				System.out.println ("[CLIENT->SERVER] Message received from client: \"" + inputLine + "\".");
 				
-				startTime = clock.getClock();
+				/** Check inputLine here for what kind of commands to give */
+				
+				startTime = clock.getTime();
 				clock.increment(CHUNK);
-				stopTime = clock.getClock();
-				
-				//Sends back a response to indicate that the message was recieved
-				//socketOutput.println ("Message recieved.");
+				stopTime = clock.getTime();
 				
 				//Sends the next chunk of work to any client that asks for it
-				socketOutput.println (startTime + ":" + stopTime);
+				socketOutput.println ("[COMMAND] Work L1= " + startTime.length() + " L2= " +
+					stopTime.length() + " " + startTime + stopTime);
 				
-				//Remember to print it out on this end
-				System.out.println ("[CLIENT->SERVER] Message received from client: \"" + inputLine + "\".");
+				System.out.println ("[SERVER->CLIENT] Sent line to client: " + startTime.length() + " " + stopTime.length() +
+					" " + startTime + stopTime);
+				
 				System.out.println ("[SERVER] Waiting for inbound traffic from the client...");
+				//Wait for more communications...
 			}
 			
 			clientSocket.close();

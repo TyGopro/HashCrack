@@ -5,7 +5,7 @@ class Test
 		System.out.println ("[TESTING] Beginning of test.");
 		
 		Client testClient = new Client ("127.0.0.1:6789");
-		testClient.sendLines();
+		testClient.startWork();
 		
 		System.out.println ("\n[TESTING] End of test.");
 	}
