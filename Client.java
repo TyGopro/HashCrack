@@ -4,7 +4,7 @@
 *	PURPOSE:	Client software to be adapted at a later date
 */
 
-//REMARKS:		Get this thing threaded if possible, when dealing with the hashes.
+//REMARKS:		Remove the CLI business, won't need that in version 1.0
 
 import java.net.*;
 import java.util.*;
@@ -24,8 +24,6 @@ class Client
 	private Clock clientClock;
 	private static final String TARGET = "6dd075556effaa6e7f1e3e3ba9fdc5fa";
 	
-	
-	
 	public Client (String serverLocation)
 	{
 		Scanner scanner = new Scanner (serverLocation);
@@ -33,8 +31,8 @@ class Client
 		hostAddr = scanner.next();
 		portNumber = scanner.nextInt();
 		
-		System.out.print ("[TESTING] Host location was set to \"" + hostAddr + "\" and ");
-		System.out.println ("port number was set to \"" + portNumber + "\".");
+		System.out.print ("[TESTING] Host location will be set to \"" + hostAddr + "\" and ");
+		System.out.println ("port number will be set to \"" + portNumber + "\".");
 		System.out.println ("[SYSTEM] Press ctrl+d to exit.");
 	}
 	
@@ -43,16 +41,11 @@ class Client
 	{
 		try
 		{
+			boolean hashFound = false;
 			String inputLine;
 			Scanner netScanner;
 			String serverString;
-			String startTime = "";
-			String stopTime = "";
-			String testHash;
-			boolean doneSearching = false;
 			String instType;
-			int startLength;
-			int stopLength;
 	
 			//Open socket to server
 			toServer = new Socket (hostAddr, portNumber);
@@ -69,72 +62,41 @@ class Client
 			//Keep getting input lines until ctrl+d
 			System.out.print ("[CLIENT] Enter message to send to server and get a chunk of work: "); 
 			
-			while ((inputLine = commandLine.readLine()) != null)
+			while ((!hashFound) && ((inputLine = commandLine.readLine()) != null))
 			{
 				//Send the userInput line to the server
-				socketOutput.println (inputLine);
+				socketOutput.println ("[COMMAND] GiveWork");
 				
 				//Get response from server
 				serverString = socketInput.readLine();
 								
 				System.out.println ("[SERVER->CLIENT] Message received from server: \"" + serverString + "\"");
 				
-				/** [WORK COMMAND] Under construction; phase 1 below... */
 				netScanner = new Scanner (serverString);
 				netScanner.next(); //Skip the [COMMAND] for now
 				instType = netScanner.next(); //Read in the command type
 				
 				if ("Work".equals(instType))
 				{
-					netScanner.next(); 	//Skip over the "L1="
-					startLength = netScanner.nextInt();
+					workMode(netScanner);
+					System.out.print ("[CLIENT] Enter message to send to server and get a chunk of work: ");
+					//Get another line of input at the top of this loop
+				}
+				else if ("Found!".equals(instType))
+				{
+					//read in the answer
+					netScanner.next();	//Skip over the "Answer is:"
+					netScanner.next();
 					
-					netScanner.next();	//Skip over the "L2="
-					stopLength = netScanner.nextInt();
+					System.out.print ("[SERVER] Server says answer has been found. ");
+					System.out.println ("Plaintext is: \"" + netScanner.next() + "\"");
 					
-					String temporary = netScanner.nextLine();
-					
-					startTime = temporary.substring (1, startLength+1);
-					stopTime = temporary.substring (startLength+1);	//Can also use stopLength here if needed.
-					
-					System.out.println ("[TESTING] startLength was: \"" + startLength + 
-						"\" and stopLength was: \"" + stopLength + "\"");
-					System.out.println ("[TESTING] startTime was: \"" + startTime + 
-						"\" and stopTime was: \"" + stopTime + "\"");
+					hashFound = true;	//Exit the Client from here
 				}
 				else
 				{
-					System.out.println ("[ERROR] Received an invalid work packet!");
+					System.out.println ("[NETERROR] Received an invalid command via network!");
 				}
-				
-				clientClock = new Clock (startTime);
-				
-				while (!doneSearching)
-				{
-					testHash = getHash(clientClock.getTime());
-			
-// 					System.out.println ("[TESTING] Clock is: \"" + clientClock.getTime() + "\" and hash is: " + testHash);
-			
-					if (testHash.equals(TARGET))
-					{
-						doneSearching = true;
-						System.out.println ("[SYSTEM] Hashed plaintext is: " + clientClock.getTime());
-					}
-					else if (clientClock.getTime().equals(stopTime))
-					{
-						doneSearching = true;
-						System.out.println ("[SYSTEM] Didn't find hash in given chunk of work.");
-					}
-					else
-					{
-						clientClock.getNext();
-					}
-				}
-				doneSearching = false;
-				/** [WORK COMMAND] Under construction; phase 1 above ^ */ //NEXT UP: DIVIDE INTO EACH WORK TYPE METHODS!
-				
-				System.out.print ("[CLIENT] Send message to server: ");
-				//Get another line of input at the top of this loop
 			}
 			
 			//Close everything off when we're done with it
@@ -142,6 +104,8 @@ class Client
 			socketOutput.close();
 			socketInput.close();
 			commandLine.close();
+			
+			System.out.println ("[SYSTEM] Client has finished working. Terminating.");
 		}
 		catch (UnknownHostException uhe)
 		{
@@ -156,8 +120,60 @@ class Client
 		}
 	}
 	
+	private void workMode (Scanner netScanner)
+	{
+		String startTime = "";
+		String stopTime = "";
+		String testHash;
+		boolean doneSearching = false;
+		int startLength;
+		int stopLength;
+			
+		netScanner.next(); 	//Skip over the "L1="
+		startLength = netScanner.nextInt();
+		
+		netScanner.next();	//Skip over the "L2="
+		stopLength = netScanner.nextInt();
+		
+		String temporary = netScanner.nextLine();
+		
+		startTime = temporary.substring (1, startLength+1);
+		stopTime = temporary.substring (startLength+1);	//Can also use stopLength here if needed.
+		
+		System.out.println ("[TESTING] startLength was: \"" + startLength + "\" and stopLength was: \"" + stopLength + "\"");
+		System.out.println ("[TESTING] startTime was: \"" + startTime + "\" and stopTime was: \"" + stopTime + "\"");
+			
+		clientClock = new Clock (startTime);
+		
+		while (!doneSearching)
+		{
+			testHash = getHash(clientClock.getTime());
+			
+// 			System.out.println ("[TESTING] Clock is: \"" + clientClock.getTime() + "\" and hash is: " + testHash);
+			
+			if (testHash.equals(TARGET))
+			{
+				doneSearching = true;
+				System.out.println ("[SYSTEM] Found answer locally! Result was: " + clientClock.getTime());
+				
+				//Report the good news back to the server
+				socketOutput.println ("[COMMAND] Found! Answer is: " + clientClock.getTime());
+			}
+			else if (clientClock.getTime().equals(stopTime))
+			{
+				doneSearching = true;
+				System.out.println ("[SYSTEM] Didn't find hash in given chunk of work.");
+			}
+			else
+			{
+				clientClock.getNext();
+			}
+		}
+		doneSearching = false;
+	}
+	
 	// PURPOSE:	String goes in, hashed String comes out */
-	public static String getHash (String hashThis)
+	private static String getHash (String hashThis)
 	{
 		String hashType = "MD5";
 		String encodingType = "UTF-8";
