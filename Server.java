@@ -1,11 +1,8 @@
 /**
 *	CLASS:		Server
 *	AUTHOR:		Tyler Gauvreau
-*	PURPOSE:	Server software to be adapted at a later date
+*	PURPOSE:	Server software for HashCrack
 */
-
-//ADDITIONAL REMARKS: 	Look up multicasting, if that's the kind of thing we need?
-//						Make a counter for # of connected clients as well.
 
 import java.net.*;
 import java.io.*;
@@ -37,10 +34,9 @@ class Server
 			
 			isServerOpen = true;
 			
-			//Handle client input here; modify this part to suit our purposes
-			while (isServerOpen) 	//Use isFound here in the future when finding hashes?
+			while (isServerOpen)
 			{
-				//Create a new ServerThread and start it. Waits for client connection.
+				//Create a new ServerThread and start it. Then waits for more client connections.
 				new ServerThread (serverSocket.accept()).start();
 			}
 			

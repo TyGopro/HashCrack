@@ -86,7 +86,7 @@ public class HashCrack
 			byteDigest = digester.digest(bytesOfInput);
 		}
 		
-		/** Turn outputs into something legible, not that other garble; this is the only part I do not fully understand! */
+		/** Turn outputs into something legible, not that other garble */
 		for (int i = 0; i < byteDigest.length; i++)
 		{
 			int representation = byteDigest[i] & 0xFF;	//OHGOD, turns out the "& 0xFF" part is REALLY important! WHY?!

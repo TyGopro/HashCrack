@@ -1,7 +1,7 @@
 /**
 *	CLASS:		Clock
 *	AUTHOR:		Tyler Gauvreau
-*	PURPOSE:	Acts as the counter (or clock) to the rainbow table generator
+*	PURPOSE:	Acts as the counter (or clock) for the server's load balancer
 */
 
 class Clock

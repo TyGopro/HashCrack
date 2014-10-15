@@ -1,11 +1,9 @@
 /**
 *	CLASS:		Server
 *	AUTHOR:		Tyler Gauvreau
-*	PURPOSE:	Server software for HashCrack
+*	PURPOSE:	Server thread software for HashCrack
 */
 
-//REMARKS:		Get that funky answerMode logic sorted out
-// 				Get the threads to notify each other of program termination somehow
 
 import java.net.*;
 import java.net.InetAddress;
@@ -42,7 +40,7 @@ public class ServerThread extends Thread
 			System.out.print ("[SERVER] A new client has joined from the following address: ");
 			System.out.println (clientSocket.getInetAddress().getHostAddress());
 			
-			//Handle client input here; modify this part to suit our purposes
+			//Handle client input here
 			while (!hashFound)
 			{
 				inputLine = socketInput.readLine();

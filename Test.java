@@ -1,3 +1,9 @@
+/**
+*	CLASS:		Test
+*	AUTHOR:		Tyler Gauvreau
+*	PURPOSE:	Just spawns a client
+*/
+
 class Test
 {
 	public static void main (String[] args)

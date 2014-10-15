@@ -1,10 +1,10 @@
 /**
 *	CLASS:		Client
 *	AUTHOR:		Tyler Gauvreau
-*	PURPOSE:	Client software to be adapted at a later date
+*	PURPOSE:	Client software for HashCrack
 */
 
-//REMARKS:		Remove the CLI business, won't need that in version 1.0
+//REMARKS:		Enter key is needed to get next segment of work; easier to show off this way.
 
 import java.net.*;
 import java.util.*;
@@ -208,7 +208,7 @@ class Client
 			byteDigest = digester.digest(bytesOfInput);
 		}
 		
-		/** Turn outputs into something legible, not that other garble; this is the only part I do not fully understand! */
+		/** Turn outputs into something legible, not that other garble */
 		for (int i = 0; i < byteDigest.length; i++)
 		{
 			int representation = byteDigest[i] & 0xFF;	//OHGOD, turns out the "& 0xFF" part is REALLY important! WHY?!
